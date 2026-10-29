@@ -1,0 +1,30 @@
+CREATE TABLE tb_solicitations
+(
+    id               BIGSERIAL   NOT NULL,
+    client_id        BIGINT      NOT NULL,
+    status           varchar(80) NOT NULL,
+    current_step     INTEGER     NOT NULL,
+    service_type     varchar(30),
+    title            varchar(80),
+    description      varchar(1000),
+    cep              char(9),
+    number           varchar(20),
+    complement       varchar(100),
+    street           varchar(100),
+    neighborhood     varchar(80),
+    city             varchar(50),
+    state            char(2),
+    priority         varchar(30),
+    estimated_value  DECIMAL(19, 2),
+    preferred_date   date,
+    terms_accepted   BOOLEAN,
+    created_at       timestamp   NOT NULL,
+    updated_at       timestamp   NOT NULL,
+    submitted_at     timestamp,
+    analyzed_at      timestamp,
+    analyzed_by      BIGINT,
+    analysis_comment VARCHAR(250),
+
+    PRIMARY KEY (id),
+    FOREIGN KEY (client_id) REFERENCES tb_users (id)
+)
