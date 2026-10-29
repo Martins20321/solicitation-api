@@ -19,6 +19,7 @@ import java.time.LocalDate;
 public class StepThreeData {
 
     @Enumerated(EnumType.STRING)
+    @Column(length = 30)
     private Priority priority;
     @Column(name = "preferred_date")
     private LocalDate preferredDate;

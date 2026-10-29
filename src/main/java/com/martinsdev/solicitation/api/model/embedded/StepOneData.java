@@ -15,9 +15,11 @@ import lombok.*;
 @Setter
 public class StepOneData {
 
-    @Column(name = "service_type")
+    @Column(name = "service_type", length = 30)
     @Enumerated(EnumType.STRING)
     private ServiceType serviceType;
+    @Column(length = 80)
     private String title;
+    @Column(length = 1000)
     private String description;
 }

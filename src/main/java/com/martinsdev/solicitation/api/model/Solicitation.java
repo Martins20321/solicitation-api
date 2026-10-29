@@ -31,7 +31,7 @@ public class Solicitation {
     private User client;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(nullable = false, length = 80)
     private StatusSolicitation status;
     @Column(name = "current_step", nullable = false)
     private Integer currentStep;
@@ -57,7 +57,7 @@ public class Solicitation {
     private LocalDateTime analyzedAt;
     @Column(name = "analyzed_by")
     private Long analyzedBy;
-    @Column(name = "analysis_comment")
+    @Column(name = "analysis_comment", length = 250)
     private String analysisComment;
 
 }
