@@ -21,8 +21,9 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 public class AnalystService {
 
-    private final AnalystCoverageRepository converageRepository;
+    private final AnalystCoverageRepository coverageRepository;
     private final SolicitationRepository solicitationRepository;
+    private final SolicitationIndexService solicitationIndexService;
 
     // 1. GET /{id}
     public SolicitationResponseDTO getSolicitationById(Long id, User analyst) {
@@ -42,6 +43,7 @@ public class AnalystService {
         solicitation.setStatus(StatusSolicitation.IN_REVIEW);
 
         solicitationRepository.save(solicitation);
+        solicitationIndexService.index(solicitation);
         return new SolicitationResponseDTO(solicitation);
     }
 
@@ -64,6 +66,7 @@ public class AnalystService {
         solicitation.setAnalysisComment(decisionRequestDTO.comment());
 
         solicitationRepository.save(solicitation);
+        solicitationIndexService.index(solicitation);
 
         return new SolicitationResponseDTO(solicitation);
     }
@@ -72,7 +75,7 @@ public class AnalystService {
         Solicitation solicitation = solicitationRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Solicitation not found by id: " + id));
 
-        AnalystCoverage analystFound = converageRepository.findByUser(analyst)
+        AnalystCoverage analystFound = coverageRepository.findByUser(analyst)
                 .orElseThrow(() -> new ResourceNotFoundException("AnalystCoverage not found"));
 
         // verifica se os estados do analyst abrangem o estado da solicitation
