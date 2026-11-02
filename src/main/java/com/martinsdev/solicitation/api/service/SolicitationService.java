@@ -28,6 +28,7 @@ public class SolicitationService {
 
     private final SolicitationRepository repository;
     private final ViaCepClient cepClient;
+    private final SolicitationIndexService solicitationIndexService;
 
     // criacao de rascunho/DRAFT
     public SolicitationResponseDTO create(User client) {
@@ -37,6 +38,7 @@ public class SolicitationService {
                 .client(client)
                 .build();
         repository.save(solicitation);
+        solicitationIndexService.index(solicitation);
 
         return new SolicitationResponseDTO(solicitation);
     }
@@ -74,6 +76,7 @@ public class SolicitationService {
         solicitationStp1.setCurrentStep(1);
 
         repository.save(solicitationStp1);
+        solicitationIndexService.index(solicitationStp1);
 
         return new SolicitationResponseDTO(solicitationStp1);
     }
@@ -99,6 +102,7 @@ public class SolicitationService {
         solicitationStp2.setCurrentStep(2);
 
         repository.save(solicitationStp2);
+        solicitationIndexService.index(solicitationStp2);
 
         return new SolicitationResponseDTO(solicitationStp2);
     }
@@ -124,6 +128,7 @@ public class SolicitationService {
         solicitationStp3.setCurrentStep(3);
 
         repository.save(solicitationStp3);
+        solicitationIndexService.index(solicitationStp3);
 
         return new SolicitationResponseDTO(solicitationStp3);
     }
@@ -140,6 +145,7 @@ public class SolicitationService {
         solicitationSubmitted.setSubmittedAt(LocalDateTime.now());
 
         repository.save(solicitationSubmitted);
+        solicitationIndexService.index(solicitationSubmitted);
 
         return new SolicitationResponseDTO(solicitationSubmitted);
     }
