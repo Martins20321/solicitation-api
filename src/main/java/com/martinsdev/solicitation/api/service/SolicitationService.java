@@ -29,7 +29,7 @@ public class SolicitationService {
     private final SolicitationRepository repository;
     private final ViaCepClient cepClient;
 
-    // criacao de rascunho/DRAFT  - Acredito que nao precise desse metodo
+    // criacao de rascunho/DRAFT
     public SolicitationResponseDTO create(User client) {
         Solicitation solicitation = Solicitation.builder()
                 .status(StatusSolicitation.DRAFT)
