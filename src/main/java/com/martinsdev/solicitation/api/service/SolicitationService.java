@@ -33,6 +33,7 @@ public class SolicitationService {
     public SolicitationResponseDTO create(User client) {
         Solicitation solicitation = Solicitation.builder()
                 .status(StatusSolicitation.DRAFT)
+                .currentStep(1)
                 .client(client)
                 .build();
         repository.save(solicitation);
