@@ -78,7 +78,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<ErrorResponse> handleDataIntegrityViolation(DataIntegrityViolationException ex, HttpServletRequest request) {
         String error = "Data Integrity Violation";
-        String message = "A resource with the given data already exists";
+        String message = "The request violates a data integrity constraint";
         HttpStatus status = HttpStatus.CONFLICT;
         ErrorResponse errorResponse = new ErrorResponse(Instant.now(), status.value(), error, message, request.getRequestURI());
         return ResponseEntity.status(status).body(errorResponse);
