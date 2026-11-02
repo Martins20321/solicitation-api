@@ -3,6 +3,7 @@ package com.martinsdev.solicitation.api.controller;
 import com.martinsdev.solicitation.api.dto.AdminCreateUserRequestDTO;
 import com.martinsdev.solicitation.api.dto.UserResponseDTO;
 import com.martinsdev.solicitation.api.service.AdminService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +15,7 @@ import java.net.URI;
 @RestController
 @RequestMapping("/admin")
 @RequiredArgsConstructor
+@SecurityRequirement(name = "bearer-key")
 public class AdminController {
 
     private final AdminService service;

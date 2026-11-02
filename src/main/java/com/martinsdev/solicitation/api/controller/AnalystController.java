@@ -4,6 +4,7 @@ import com.martinsdev.solicitation.api.dto.DecisionRequestDTO;
 import com.martinsdev.solicitation.api.dto.SolicitationResponseDTO;
 import com.martinsdev.solicitation.api.model.User;
 import com.martinsdev.solicitation.api.service.AnalystService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/analyst/solicitations")
 @RequiredArgsConstructor
+@SecurityRequirement(name = "bearer-key")
 public class AnalystController {
 
     private final AnalystService service;

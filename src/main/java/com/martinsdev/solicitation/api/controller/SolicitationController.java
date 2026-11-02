@@ -3,6 +3,7 @@ package com.martinsdev.solicitation.api.controller;
 import com.martinsdev.solicitation.api.dto.*;
 import com.martinsdev.solicitation.api.model.User;
 import com.martinsdev.solicitation.api.service.SolicitationService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +17,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/solicitations")
 @RequiredArgsConstructor
+@SecurityRequirement(name = "bearer-key")
 public class SolicitationController {
 
     private final SolicitationService service;

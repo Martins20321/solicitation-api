@@ -16,8 +16,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashSet;
-
 @Service
 @RequiredArgsConstructor
 public class AdminService {
@@ -60,6 +58,6 @@ public class AdminService {
 
     public UserResponseDTO getUserById(Long id) {
         return new UserResponseDTO(userRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found by id '" + id +"'")));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found by id '" + id + "'")));
     }
 }
