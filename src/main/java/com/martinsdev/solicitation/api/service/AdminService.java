@@ -5,6 +5,7 @@ import com.martinsdev.solicitation.api.dto.UserResponseDTO;
 import com.martinsdev.solicitation.api.infra.exception.EmailAlreadyExistsException;
 import com.martinsdev.solicitation.api.infra.exception.InvalidOperationException;
 import com.martinsdev.solicitation.api.infra.exception.InvalidRoleException;
+import com.martinsdev.solicitation.api.infra.exception.ResourceNotFoundException;
 import com.martinsdev.solicitation.api.model.AnalystCoverage;
 import com.martinsdev.solicitation.api.model.User;
 import com.martinsdev.solicitation.api.model.enums.RoleUser;
@@ -55,5 +56,10 @@ public class AdminService {
         }
 
         return new UserResponseDTO(user);
+    }
+
+    public UserResponseDTO getUserById(Long id) {
+        return new UserResponseDTO(userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found by id '" + id +"'")));
     }
 }
