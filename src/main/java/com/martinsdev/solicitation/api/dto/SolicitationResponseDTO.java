@@ -1,10 +1,12 @@
 package com.martinsdev.solicitation.api.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.martinsdev.solicitation.api.model.Solicitation;
 import com.martinsdev.solicitation.api.model.enums.StatusSolicitation;
 
 import java.time.LocalDateTime;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public record SolicitationResponseDTO(Long id,
                                       StatusSolicitation status,
                                       Integer currentStep,
