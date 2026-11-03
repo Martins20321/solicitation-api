@@ -39,15 +39,15 @@ public class SolicitationSearchService {
         }
 
         if (searchRequestDTO.status() != null && !searchRequestDTO.status().isBlank()) {
-            criteria = criteria.and("status").is(searchRequestDTO.status());
+            criteria = criteria.and("status").is(searchRequestDTO.status().strip().toUpperCase());
         }
 
         if (searchRequestDTO.serviceType() != null && !searchRequestDTO.serviceType().isBlank()) {
-            criteria = criteria.and("serviceType").is(searchRequestDTO.serviceType());
+            criteria = criteria.and("serviceType").is(searchRequestDTO.serviceType().strip().toUpperCase());
         }
 
         if (searchRequestDTO.priority() != null && !searchRequestDTO.priority().isBlank()) {
-            criteria = criteria.and("priority").is(searchRequestDTO.priority());
+            criteria = criteria.and("priority").is(searchRequestDTO.priority().strip().toUpperCase());
         }
 
         // Role = ANALYST - força o filtro de UF ao coverage dele
@@ -55,11 +55,11 @@ public class SolicitationSearchService {
             if (user.getRole() == RoleUser.ANALYST) {
                 AnalystCoverage analystFound = coverageRepository.findByUser(user)
                         .orElseThrow(() -> new ResourceNotFoundException("AnalystCoverage not found"));
-                if (!analystFound.getStates().contains(searchRequestDTO.state())) {
+                if (!analystFound.getStates().contains(searchRequestDTO.state().strip().toUpperCase())) {
                     throw new ForbiddenException();
                 }
             }
-            criteria = criteria.and("state").is(searchRequestDTO.state());
+            criteria = criteria.and("state").is(searchRequestDTO.state().strip().toUpperCase());
         } else { // quando nao manda o state
             if (user.getRole() == RoleUser.ANALYST) {
                 AnalystCoverage analystFound = coverageRepository.findByUser(user)

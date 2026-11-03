@@ -9,18 +9,18 @@ public record SolicitationSearchRequestDTO(String q,
                                            String state,
                                            LocalDateTime dateFrom,
                                            LocalDateTime dateTo,
-                                           int page,
-                                           int size,
+                                           Integer page,
+                                           Integer size,
                                            String sort) {
 
     private static final int DEFAULT_SIZE = 20;
     private static final int MAX_SIZE = 100;
 
     public SolicitationSearchRequestDTO {
-        if (page < 0) {
+        if (page == null || page < 0 ) {
             page = 0;
         }
-        if (size <= 0) {
+        if (size == null || size <= 0) {
             size = DEFAULT_SIZE;
         } else if (size > MAX_SIZE) {
             size = MAX_SIZE;

@@ -2,6 +2,7 @@ package com.martinsdev.solicitation.api.model.document;
 
 import lombok.*;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.elasticsearch.annotations.DateFormat;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
@@ -37,7 +38,6 @@ public class SolicitationDocument {
     @Field(type = FieldType.Text)
     private String description;
 
-    @Field(type = FieldType.Date)
+    @Field(format = DateFormat.date_hour_minute_second_millis)
     private LocalDateTime createdAt;
 }
-
