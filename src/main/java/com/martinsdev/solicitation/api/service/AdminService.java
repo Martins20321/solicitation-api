@@ -2,6 +2,7 @@ package com.martinsdev.solicitation.api.service;
 
 import com.martinsdev.solicitation.api.dto.AdminCreateUserRequestDTO;
 import com.martinsdev.solicitation.api.dto.UserResponseDTO;
+import com.martinsdev.solicitation.api.infra.aop.Audit;
 import com.martinsdev.solicitation.api.infra.exception.EmailAlreadyExistsException;
 import com.martinsdev.solicitation.api.infra.exception.InvalidOperationException;
 import com.martinsdev.solicitation.api.infra.exception.InvalidRoleException;
@@ -24,6 +25,7 @@ public class AdminService {
     private final PasswordEncoder passwordEncoder;
     private final AnalystCoverageRepository coverageRepository;
 
+    @Audit(action = "CREATE_USER")
     @Transactional
     public UserResponseDTO createUser(AdminCreateUserRequestDTO userRequestDTO) {
         if (userRepository.existsByEmail(userRequestDTO.email())) {

@@ -1,6 +1,7 @@
 package com.martinsdev.solicitation.api.service;
 
 import com.martinsdev.solicitation.api.dto.*;
+import com.martinsdev.solicitation.api.infra.aop.Audit;
 import com.martinsdev.solicitation.api.infra.client.ViaCepClient;
 import com.martinsdev.solicitation.api.infra.exception.ForbiddenException;
 import com.martinsdev.solicitation.api.infra.exception.IncompleteSubmissionException;
@@ -134,6 +135,7 @@ public class SolicitationService {
     }
 
     // enviando para análise(Submitted)
+    @Audit(action = "SUBMIT_SOLICITATION")
     public SolicitationResponseDTO submit(Long id, User client) {
 
         Solicitation solicitationSubmitted = findAndValidateDraftOwnership(id, client);

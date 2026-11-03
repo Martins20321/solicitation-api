@@ -2,6 +2,7 @@ package com.martinsdev.solicitation.api.service;
 
 import com.martinsdev.solicitation.api.dto.DecisionRequestDTO;
 import com.martinsdev.solicitation.api.dto.SolicitationResponseDTO;
+import com.martinsdev.solicitation.api.infra.aop.Audit;
 import com.martinsdev.solicitation.api.infra.exception.ForbiddenException;
 import com.martinsdev.solicitation.api.infra.exception.InvalidOperationException;
 import com.martinsdev.solicitation.api.infra.exception.ResourceNotFoundException;
@@ -33,6 +34,7 @@ public class AnalystService {
     }
 
     // 2. POST /{id}/start
+    @Audit(action = "START_REVIEW")
     public SolicitationResponseDTO startReview(Long id, User analyst) {
         Solicitation solicitation = findAndValidateAnalystCoverage(id, analyst);
 
@@ -48,6 +50,7 @@ public class AnalystService {
     }
 
     // 3. POST /{id}/decide
+    @Audit(action = "DECIDE")
     public SolicitationResponseDTO decide(Long id, DecisionRequestDTO decisionRequestDTO, User analyst) {
         Solicitation solicitation = findAndValidateAnalystCoverage(id, analyst);
 
