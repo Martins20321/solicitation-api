@@ -1,6 +1,7 @@
 package com.martinsdev.solicitation.api.service;
 
 import com.martinsdev.solicitation.api.dto.DecisionRequestDTO;
+import com.martinsdev.solicitation.api.dto.SolicitationDetailResponseDTO;
 import com.martinsdev.solicitation.api.dto.SolicitationResponseDTO;
 import com.martinsdev.solicitation.api.infra.aop.Audit;
 import com.martinsdev.solicitation.api.infra.exception.ForbiddenException;
@@ -27,10 +28,10 @@ public class AnalystService {
     private final SolicitationIndexService solicitationIndexService;
 
     // 1. GET /{id}
-    public SolicitationResponseDTO getSolicitationById(Long id, User analyst) {
+    public SolicitationDetailResponseDTO getSolicitationById(Long id, User analyst) {
         Solicitation solicitation = findAndValidateAnalystCoverage(id, analyst);
 
-        return new SolicitationResponseDTO(solicitation);
+        return new SolicitationDetailResponseDTO(solicitation);
     }
 
     // 2. POST /{id}/start

@@ -1,9 +1,6 @@
 package com.martinsdev.solicitation.api.controller;
 
-import com.martinsdev.solicitation.api.dto.DecisionRequestDTO;
-import com.martinsdev.solicitation.api.dto.SolicitationResponseDTO;
-import com.martinsdev.solicitation.api.dto.SolicitationSearchRequestDTO;
-import com.martinsdev.solicitation.api.dto.SolicitationSearchResponseDTO;
+import com.martinsdev.solicitation.api.dto.*;
 import com.martinsdev.solicitation.api.model.User;
 import com.martinsdev.solicitation.api.service.AnalystService;
 import com.martinsdev.solicitation.api.service.SolicitationSearchService;
@@ -24,7 +21,7 @@ public class AnalystController {
     private final SolicitationSearchService solicitationSearchService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<SolicitationResponseDTO> getSolicitationById(@PathVariable Long id, @AuthenticationPrincipal User analyst) {
+    public ResponseEntity<SolicitationDetailResponseDTO> getSolicitationById(@PathVariable Long id, @AuthenticationPrincipal User analyst) {
         return ResponseEntity.ok(service.getSolicitationById(id, analyst));
     }
 
