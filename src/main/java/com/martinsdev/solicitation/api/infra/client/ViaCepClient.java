@@ -32,7 +32,10 @@ public class ViaCepClient {
             }
 
             return viaCepResponseDTO;
-        } catch (ResourceAccessException | HttpClientErrorException | HttpServerErrorException e) {
+        } catch (HttpClientErrorException e) {
+            // ViaCEP mal formatado
+            throw new InvalidCepException(cep);
+        } catch (ResourceAccessException | HttpServerErrorException e) {
             throw new ExternalServiceException("ViaCEP service unavailable. Please try again later");
         }
     }

@@ -2,17 +2,19 @@ package com.martinsdev.solicitation.api.infra.handler;
 
 import com.martinsdev.solicitation.api.infra.exception.*;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import javax.naming.AuthenticationException;
 import java.time.Instant;
 import java.util.stream.Collectors;
 
+@Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -84,8 +86,24 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(status).body(errorResponse);
     }
 
+    @ExceptionHandler(ExternalServiceException.class)
+    public ResponseEntity<ErrorResponse> handleExternalService(ExternalServiceException ex, HttpServletRequest request) {
+        String error = "External Service Unavailable";
+        HttpStatus status = HttpStatus.SERVICE_UNAVAILABLE;
+        ErrorResponse errorResponse = new ErrorResponse(Instant.now(), status.value(), error, ex.getMessage(), request.getRequestURI());
+        return ResponseEntity.status(status).body(errorResponse);
+    }
+
+    @ExceptionHandler(InvalidCepException.class)
+    public ResponseEntity<ErrorResponse> handleExternalService(InvalidCepException ex, HttpServletRequest request) {
+        String error = "Invalid Cep Exception";
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        ErrorResponse errorResponse = new ErrorResponse(Instant.now(), status.value(), error, ex.getMessage(), request.getRequestURI());
+        return ResponseEntity.status(status).body(errorResponse);
+    }
+
     @ExceptionHandler(AuthenticationException.class)
-    public ResponseEntity<ErrorResponse> handleAuthenticationException(AuthenticationException ex, HttpServletRequest request) {
+    public ResponseEntity<ErrorResponse> handleAuthentication(AuthenticationException ex, HttpServletRequest request) {
         String error = "Unauthorized";
         String message = "Invalid email or password";
         HttpStatus status = HttpStatus.UNAUTHORIZED;
