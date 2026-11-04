@@ -1,0 +1,1 @@
+ALTER TABLE tb_solicitations ALTER COLUMN analysis_comment TYPE varchar(1000)

@@ -57,7 +57,7 @@ public class Solicitation {
     private LocalDateTime analyzedAt;
     @Column(name = "analyzed_by")
     private Long analyzedBy;
-    @Column(name = "analysis_comment", length = 250)
+    @Column(name = "analysis_comment", length = 1000)
     private String analysisComment;
 
 }
