@@ -17,5 +17,7 @@ public abstract class IntegrationTestBase {
 
     @Container
     @ServiceConnection
-    static ElasticsearchContainer elasticsearch = new ElasticsearchContainer("docker.elastic.co/elasticsearch/elasticsearch:8.13.0");
+    static ElasticsearchContainer elasticsearch = new ElasticsearchContainer("docker.elastic.co/elasticsearch/elasticsearch:9.2.0")
+            .withEnv("xpack.security.enabled", "false")
+            .withStartupTimeout(java.time.Duration.ofMinutes(3));
 }
