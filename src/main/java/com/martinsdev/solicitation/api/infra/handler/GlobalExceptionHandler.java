@@ -95,7 +95,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(InvalidCepException.class)
-    public ResponseEntity<ErrorResponse> handleExternalService(InvalidCepException ex, HttpServletRequest request) {
+    public ResponseEntity<ErrorResponse> handleInvalidCep(InvalidCepException ex, HttpServletRequest request) {
         String error = "Invalid Cep Exception";
         HttpStatus status = HttpStatus.BAD_REQUEST;
         ErrorResponse errorResponse = new ErrorResponse(Instant.now(), status.value(), error, ex.getMessage(), request.getRequestURI());
