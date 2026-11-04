@@ -81,6 +81,12 @@ public class AnalystService {
                 .orElseThrow(() -> new ResourceNotFoundException("Solicitation not found by id: " + id));
 
         if (user.getRole() == RoleUser.ANALYST) {
+
+            // analyst não pode ver DRAFTS, pois ainda estão editando
+            if (solicitation.getStatus() == StatusSolicitation.DRAFT) {
+                throw new ResourceNotFoundException("Solicitation not found by id: " + id);
+            }
+
             AnalystCoverage analystFound = coverageRepository.findByUser(user)
                     .orElseThrow(() -> new ResourceNotFoundException("AnalystCoverage not found"));
 

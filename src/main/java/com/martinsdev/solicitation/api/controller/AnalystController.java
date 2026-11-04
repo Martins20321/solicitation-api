@@ -21,22 +21,22 @@ public class AnalystController {
     private final SolicitationSearchService solicitationSearchService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<SolicitationDetailResponseDTO> getSolicitationById(@PathVariable Long id, @AuthenticationPrincipal User analyst) {
-        return ResponseEntity.ok(service.getSolicitationById(id, analyst));
+    public ResponseEntity<SolicitationDetailResponseDTO> getSolicitationById(@PathVariable Long id, @AuthenticationPrincipal User user) {
+        return ResponseEntity.ok(service.getSolicitationById(id, user));
     }
 
     @PostMapping("/{id}/start")
-    public ResponseEntity<SolicitationResponseDTO> start(@PathVariable Long id, @AuthenticationPrincipal User analyst) {
-        return ResponseEntity.ok(service.startReview(id, analyst));
+    public ResponseEntity<SolicitationResponseDTO> start(@PathVariable Long id, @AuthenticationPrincipal User user) {
+        return ResponseEntity.ok(service.startReview(id, user));
     }
 
     @PostMapping("/{id}/decide")
-    public ResponseEntity<SolicitationResponseDTO> decide(@PathVariable Long id, @RequestBody @Valid DecisionRequestDTO decisionRequestDTO, @AuthenticationPrincipal User analyst) {
-        return ResponseEntity.ok(service.decide(id, decisionRequestDTO, analyst));
+    public ResponseEntity<SolicitationResponseDTO> decide(@PathVariable Long id, @RequestBody @Valid DecisionRequestDTO decisionRequestDTO, @AuthenticationPrincipal User user) {
+        return ResponseEntity.ok(service.decide(id, decisionRequestDTO, user));
     }
 
     @GetMapping("/search")
-    public ResponseEntity<SolicitationSearchResponseDTO> search(@ModelAttribute SolicitationSearchRequestDTO searchRequestDTO, @AuthenticationPrincipal User analyst) {
-        return ResponseEntity.ok(solicitationSearchService.search(searchRequestDTO, analyst));
+    public ResponseEntity<SolicitationSearchResponseDTO> search(@ModelAttribute SolicitationSearchRequestDTO searchRequestDTO, @AuthenticationPrincipal User user) {
+        return ResponseEntity.ok(solicitationSearchService.search(searchRequestDTO, user));
     }
 }
