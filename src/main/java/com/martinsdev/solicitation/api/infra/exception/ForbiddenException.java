@@ -4,4 +4,8 @@ public class ForbiddenException extends RuntimeException {
     public ForbiddenException() {
         super("Access denied: you are not the owner of this resource");
     }
+
+    public ForbiddenException(String message){
+        super(message);
+    }
 }

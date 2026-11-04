@@ -84,7 +84,7 @@ public class AnalystService {
 
         // verifica se os estados do analyst abrangem o estado da solicitation
         if (!analystFound.getStates().contains(solicitation.getStepTwoData().getState())) {
-            throw new ForbiddenException();
+            throw new ForbiddenException("Access denied: this solicitation is outside your state coverage");
         }
 
         return solicitation;
