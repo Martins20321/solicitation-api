@@ -22,7 +22,7 @@ public class DataSeeder implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        if (repository.findByRole(RoleUser.ADMIN).isEmpty()){
+        if (!repository.existsByRole(RoleUser.ADMIN)){
             User user = User.builder()
                     .name("adminsolicitation")
                     .email("admin@solicitation.com")
