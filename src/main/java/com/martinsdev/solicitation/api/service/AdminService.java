@@ -9,6 +9,7 @@ import com.martinsdev.solicitation.api.infra.exception.InvalidRoleException;
 import com.martinsdev.solicitation.api.infra.exception.ResourceNotFoundException;
 import com.martinsdev.solicitation.api.model.AnalystCoverage;
 import com.martinsdev.solicitation.api.model.User;
+import com.martinsdev.solicitation.api.model.enums.BrazilianStates;
 import com.martinsdev.solicitation.api.model.enums.RoleUser;
 import com.martinsdev.solicitation.api.repository.AnalystCoverageRepository;
 import com.martinsdev.solicitation.api.repository.UserRepository;
@@ -16,6 +17,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -48,9 +52,11 @@ public class AdminService {
         if (userRequestDTO.role() == RoleUser.ANALYST && (userRequestDTO.states() == null || userRequestDTO.states().isEmpty())) {
             throw new InvalidOperationException("An ANALYST must be assigned at least one state of coverage");
         } else if (userRequestDTO.role() == RoleUser.ANALYST) {
+            Set<String> validStates = validateAndNormalizeStates(userRequestDTO.states());
+
             AnalystCoverage coverage = AnalystCoverage.builder()
                     .user(user)
-                    .states(userRequestDTO.states())
+                    .states(validStates)
                     .build();
             coverageRepository.save(coverage);
         }
@@ -69,5 +75,20 @@ public class AdminService {
                     .orElseThrow(() -> new ResourceNotFoundException("AnalystCoverage not found"));
             return new UserResponseDTO(user, analystFound);
         }
+    }
+
+    private Set<String> validateAndNormalizeStates(Set<String> states) {
+        Set<String> normalized = new HashSet<>();
+
+        for (String state : states) {
+            String stateClean = state.strip().toUpperCase();
+            try {
+                BrazilianStates.valueOf(stateClean);
+            } catch (IllegalArgumentException e) {
+                throw new InvalidOperationException("Invalid state: '" + state + "'. Must be a valid Brazilian UF.");
+            }
+            normalized.add(stateClean);
+        }
+        return normalized;
     }
 }
