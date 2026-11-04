@@ -105,7 +105,7 @@ public class SolicitationSearchService {
         String field = split[0];
         String direction = split[1];
         try {
-            return Sort.by(Sort.Direction.valueOf(direction.toUpperCase()), field);
+            return Sort.by(Sort.Direction.valueOf(direction.toUpperCase().strip()), field.strip());
         } catch (IllegalArgumentException exception) {
             throw new InvalidOperationException("Invalid sort direction '" + direction + "'. Use 'ASC' or 'DESC', please!");
         }
