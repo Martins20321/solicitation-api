@@ -59,7 +59,15 @@ public class AdminService {
     }
 
     public UserResponseDTO getUserById(Long id) {
-        return new UserResponseDTO(userRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found by id '" + id + "'")));
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found by id '" + id + "'"));
+
+        if (user.getRole() != RoleUser.ANALYST) {
+            return new UserResponseDTO(user);
+        } else {
+            AnalystCoverage analystFound = coverageRepository.findByUser(user)
+                    .orElseThrow(() -> new ResourceNotFoundException("AnalystCoverage not found"));
+            return new UserResponseDTO(user, analystFound);
+        }
     }
 }

@@ -1,18 +1,27 @@
 package com.martinsdev.solicitation.api.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.martinsdev.solicitation.api.model.AnalystCoverage;
 import com.martinsdev.solicitation.api.model.User;
 import com.martinsdev.solicitation.api.model.enums.RoleUser;
 
 import java.time.LocalDateTime;
+import java.util.Set;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public record UserResponseDTO(Long id,
                               String name,
                               String email,
                               RoleUser role,
+                              Set<String> states,
                               boolean enabled,
                               LocalDateTime createdAt) {
 
     public UserResponseDTO(User user) {
-        this(user.getId(), user.getName(), user.getEmail(), user.getRole(), user.isEnabled(), user.getCreatedAt());
+        this(user.getId(), user.getName(), user.getEmail(), user.getRole(), null, user.isEnabled(), user.getCreatedAt());
+    }
+
+    public UserResponseDTO(User user, AnalystCoverage analyst) {
+        this(user.getId(), user.getName(), user.getEmail(), user.getRole(), analyst.getStates(), user.isEnabled(), user.getCreatedAt());
     }
 }
