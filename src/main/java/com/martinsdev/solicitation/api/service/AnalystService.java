@@ -11,6 +11,7 @@ import com.martinsdev.solicitation.api.model.AnalystCoverage;
 import com.martinsdev.solicitation.api.model.Solicitation;
 import com.martinsdev.solicitation.api.model.User;
 import com.martinsdev.solicitation.api.model.enums.Decision;
+import com.martinsdev.solicitation.api.model.enums.RoleUser;
 import com.martinsdev.solicitation.api.model.enums.StatusSolicitation;
 import com.martinsdev.solicitation.api.repository.AnalystCoverageRepository;
 import com.martinsdev.solicitation.api.repository.SolicitationRepository;
@@ -28,16 +29,16 @@ public class AnalystService {
     private final SolicitationIndexService solicitationIndexService;
 
     // 1. GET /{id}
-    public SolicitationDetailResponseDTO getSolicitationById(Long id, User analyst) {
-        Solicitation solicitation = findAndValidateAnalystCoverage(id, analyst);
+    public SolicitationDetailResponseDTO getSolicitationById(Long id, User user) {
+        Solicitation solicitation = findAndValidateAnalystCoverage(id, user);
 
         return new SolicitationDetailResponseDTO(solicitation);
     }
 
     // 2. POST /{id}/start
     @Audit(action = "START_REVIEW")
-    public SolicitationResponseDTO startReview(Long id, User analyst) {
-        Solicitation solicitation = findAndValidateAnalystCoverage(id, analyst);
+    public SolicitationResponseDTO startReview(Long id, User user) {
+        Solicitation solicitation = findAndValidateAnalystCoverage(id, user);
 
         if (solicitation.getStatus() != StatusSolicitation.SUBMITTED) {
             throw new InvalidOperationException("This operation can only be performed with the status 'SUBMITTED'");
@@ -52,8 +53,8 @@ public class AnalystService {
 
     // 3. POST /{id}/decide
     @Audit(action = "DECIDE")
-    public SolicitationResponseDTO decide(Long id, DecisionRequestDTO decisionRequestDTO, User analyst) {
-        Solicitation solicitation = findAndValidateAnalystCoverage(id, analyst);
+    public SolicitationResponseDTO decide(Long id, DecisionRequestDTO decisionRequestDTO, User user) {
+        Solicitation solicitation = findAndValidateAnalystCoverage(id, user);
 
         if (solicitation.getStatus() != StatusSolicitation.IN_REVIEW) {
             throw new InvalidOperationException("You can only decide if the status is `IN_REVIEW`");
@@ -66,7 +67,7 @@ public class AnalystService {
         }
 
         solicitation.setAnalyzedAt(LocalDateTime.now());
-        solicitation.setAnalyzedBy(analyst.getId());
+        solicitation.setAnalyzedBy(user.getId());
         solicitation.setAnalysisComment(decisionRequestDTO.comment());
 
         solicitationRepository.save(solicitation);
@@ -75,16 +76,18 @@ public class AnalystService {
         return new SolicitationResponseDTO(solicitation);
     }
 
-    private Solicitation findAndValidateAnalystCoverage(Long id, User analyst) {
+    private Solicitation findAndValidateAnalystCoverage(Long id, User user) {
         Solicitation solicitation = solicitationRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Solicitation not found by id: " + id));
 
-        AnalystCoverage analystFound = coverageRepository.findByUser(analyst)
-                .orElseThrow(() -> new ResourceNotFoundException("AnalystCoverage not found"));
+        if (user.getRole() == RoleUser.ANALYST) {
+            AnalystCoverage analystFound = coverageRepository.findByUser(user)
+                    .orElseThrow(() -> new ResourceNotFoundException("AnalystCoverage not found"));
 
-        // verifica se os estados do analyst abrangem o estado da solicitation
-        if (!analystFound.getStates().contains(solicitation.getStepTwoData().getState())) {
-            throw new ForbiddenException("Access denied: this solicitation is outside your state coverage");
+            // verifica se os estados do analyst abrangem o estado da solicitation
+            if (!analystFound.getStates().contains(solicitation.getStepTwoData().getState())) {
+                throw new ForbiddenException("Access denied: this solicitation is outside your state coverage");
+            }
         }
 
         return solicitation;
