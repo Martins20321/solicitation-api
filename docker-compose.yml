@@ -2,13 +2,14 @@ name: solicitation-api
 
 services:
   db-postgres:
+    container_name: 'db-postgres-solicitation'
     image: postgres:15-alpine
     environment:
       POSTGRES_DB: ${SPRING_DATASOURCE_DB}
       POSTGRES_USER: ${SPRING_DATASOURCE_USERNAME}
       POSTGRES_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
     ports:
-      - "127.0.0.1:5432:5432"
+      - "127.0.0.1:5433:5432"
     volumes:
       - db-data:/var/lib/postgresql/data
     networks:
@@ -20,6 +21,7 @@ services:
       retries: 5
 
   db-elasticsearch:
+    container_name: 'db-elasticsearch-solicitation'
     image: docker.elastic.co/elasticsearch/elasticsearch:9.2.0
     environment:
       - discovery.type=single-node
@@ -38,6 +40,7 @@ services:
       - network-solicitation
 
   app:
+    container_name: 'app-solicitation-api'
     build: .
     ports:
       - "8080:8080"
