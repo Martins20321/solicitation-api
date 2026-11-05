@@ -1,6 +1,7 @@
 package com.martinsdev.solicitation.api.infra.security;
 
 import com.martinsdev.solicitation.api.infra.exception.ErrorResponse;
+import com.martinsdev.solicitation.api.infra.exception.ForbiddenException;
 import com.martinsdev.solicitation.api.infra.exception.InvalidTokenException;
 import com.martinsdev.solicitation.api.service.AuthenticationService;
 import jakarta.servlet.FilterChain;
@@ -37,14 +38,25 @@ public class SecurityFilter extends OncePerRequestFilter {
 
                 var user = authService.loadUserByUsername(subject);
 
+                if (!user.isEnabled()) {
+                    throw new ForbiddenException("Your account has been disabled. Contact an administrator");
+                }
+
                 var authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
 
             filterChain.doFilter(request, response);
-        } catch (InvalidTokenException exception) {
+        } catch (InvalidTokenException | UsernameNotFoundException exception) {
             HttpStatus status = HttpStatus.UNAUTHORIZED;
             ErrorResponse errorResponse = new ErrorResponse(Instant.now(), status.value(), "Invalid Token", exception.getMessage(), request.getRequestURI());
+            String errorJson = objectMapper.writeValueAsString(errorResponse);
+            response.setStatus(status.value());
+            response.setContentType("application/json");
+            response.getWriter().write(errorJson);
+        } catch (ForbiddenException exception) {
+            HttpStatus status = HttpStatus.FORBIDDEN;
+            ErrorResponse errorResponse = new ErrorResponse(Instant.now(), status.value(), "Access denied", exception.getMessage(), request.getRequestURI());
             String errorJson = objectMapper.writeValueAsString(errorResponse);
             response.setStatus(status.value());
             response.setContentType("application/json");
