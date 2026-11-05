@@ -21,6 +21,7 @@ import org.springframework.data.elasticsearch.core.query.Criteria;
 import org.springframework.data.elasticsearch.core.query.CriteriaQuery;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Set;
 
@@ -75,11 +76,11 @@ public class SolicitationSearchService {
         }
 
         if (searchRequestDTO.dateFrom() != null) {
-            criteria = criteria.and("createdAt").greaterThanEqual(searchRequestDTO.dateFrom());
+            criteria = criteria.and("createdAt").greaterThanEqual(searchRequestDTO.dateFrom().atStartOfDay()); // inicio do dia
         }
 
         if (searchRequestDTO.dateTo() != null) {
-            criteria = criteria.and("createdAt").lessThanEqual(searchRequestDTO.dateTo());
+            criteria = criteria.and("createdAt").lessThanEqual(searchRequestDTO.dateTo().atTime(LocalTime.MAX)); // final do dia
         }
 
         Sort sort;

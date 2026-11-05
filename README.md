@@ -115,7 +115,7 @@ Todas as rotas, exceto `/auth/**`, exigem o header `Authorization: Bearer <token
 
 #### Busca
 
-Parâmetros: `q` (título e descrição), `status`, `serviceType`, `priority`, `state`, `dateFrom`, `dateTo`, `page` (padrão 0), `size` (padrão 20, máximo 100) e `sort` no formato `campo,ASC|DESC` (padrão `createdAt,DESC`).
+Parâmetros: `q` (título e descrição), `status`, `serviceType`, `priority`, `state`, `dateFrom`, `dateTo` (formato `yyyy-MM-dd`, inclusivo), `page` (padrão 0), `size` (padrão 20, máximo 100) e `sort` no formato `campo,ASC|DESC` (padrão `createdAt,DESC`).
 
 `sort` só aceita os campos `createdAt`, `status`, `priority`, `serviceType` e `state`. Outro campo ou formato inválido devolve 400.
 

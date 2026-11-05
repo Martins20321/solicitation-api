@@ -1,14 +1,14 @@
 package com.martinsdev.solicitation.api.dto;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 public record SolicitationSearchRequestDTO(String q,
                                            String status,
                                            String serviceType,
                                            String priority,
                                            String state,
-                                           LocalDateTime dateFrom,
-                                           LocalDateTime dateTo,
+                                           LocalDate dateFrom,
+                                           LocalDate dateTo,
                                            Integer page,
                                            Integer size,
                                            String sort) {
