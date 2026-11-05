@@ -1,6 +1,7 @@
 package com.martinsdev.solicitation.api.dto;
 
 import com.martinsdev.solicitation.api.model.enums.Priority;
+import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotNull;
@@ -11,5 +12,5 @@ import java.time.LocalDate;
 public record StepThreeRequestDTO(@NotNull(message = "Priority is required") Priority priority,
                                   @NotNull(message = "Preferred Date is required") @FutureOrPresent(message = "Date cannot be in the past") LocalDate preferredDate,
                                   @NotNull(message = "Estimated Value is required") @DecimalMin("0.0") BigDecimal estimatedValue,
-                                  @NotNull(message = "Terms Accepted is required") Boolean termsAccepted) {
+                                  @NotNull(message = "Terms Accepted is required") @AssertTrue(message = "Terms must be accepted") Boolean termsAccepted) {
 }
