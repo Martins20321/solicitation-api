@@ -1,5 +1,6 @@
-package com.martinsdev.solicitation.api.infra.exception;
+package com.martinsdev.solicitation.api.infra.security;
 
+import com.martinsdev.solicitation.api.infra.exception.ErrorResponse;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
