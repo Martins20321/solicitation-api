@@ -12,5 +12,5 @@ import java.time.LocalDate;
 public record StepThreeRequestDTO(@NotNull(message = "Priority is required") Priority priority,
                                   @NotNull(message = "Preferred Date is required") @FutureOrPresent(message = "Date cannot be in the past") LocalDate preferredDate,
                                   @NotNull(message = "Estimated Value is required") @DecimalMin("0.0") BigDecimal estimatedValue,
-                                  @NotNull(message = "Terms Accepted is required") @AssertTrue(message = "Terms must be accepted") Boolean termsAccepted) {
+                                  @NotNull(message = "Terms Accepted is required") @AssertTrue(message = "Terms must be accepted")Boolean termsAccepted) {
 }
