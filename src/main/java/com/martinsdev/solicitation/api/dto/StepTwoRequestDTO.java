@@ -5,4 +5,12 @@ import jakarta.validation.constraints.Size;
 
 public record StepTwoRequestDTO(@NotBlank(message = "Cep is required") String cep,
                                 @NotBlank(message = "Number is required") @Size(min = 1, max = 20) String number) {
+    public StepTwoRequestDTO {
+        if (cep != null) {
+            cep = cep.strip();
+        }
+        if (number != null) {
+            number = number.strip();
+        }
+    }
 }
