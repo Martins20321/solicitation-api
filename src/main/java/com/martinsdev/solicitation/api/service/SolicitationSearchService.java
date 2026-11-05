@@ -42,6 +42,11 @@ public class SolicitationSearchService {
             criteria = criteria.and("status").is(searchRequestDTO.status().strip().toUpperCase());
         }
 
+        // ANALYST nunca pode ver DRAFTS, mesmo que tente filtrar por esse status
+        if (user.getRole() == RoleUser.ANALYST) {
+            criteria = criteria.and("status").notIn(List.of("DRAFT"));
+        }
+
         if (searchRequestDTO.serviceType() != null && !searchRequestDTO.serviceType().isBlank()) {
             criteria = criteria.and("serviceType").is(searchRequestDTO.serviceType().strip().toUpperCase());
         }
