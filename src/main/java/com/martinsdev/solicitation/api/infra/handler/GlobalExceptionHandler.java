@@ -8,9 +8,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.web.HttpMediaTypeNotSupportedException;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import java.time.Instant;
 import java.util.stream.Collectors;
@@ -127,6 +130,33 @@ public class GlobalExceptionHandler {
         String error = "Internal Server Error";
         String message = "An unexpected error occurred. Please try again later.";
         HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
+        ErrorResponse errorResponse = new ErrorResponse(Instant.now(), status.value(), error, message, request.getRequestURI());
+        return ResponseEntity.status(status).body(errorResponse);
+    }
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<ErrorResponse> handleTypeMismatch(MethodArgumentTypeMismatchException ex, HttpServletRequest request) {
+        String error = "Invalid parameter type";
+        String message = "Parameter '" + ex.getName() + "' should be of type " + ex.getRequiredType().getSimpleName();
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        ErrorResponse errorResponse = new ErrorResponse(Instant.now(), status.value(), error, message, request.getRequestURI());
+        return ResponseEntity.status(status).body(errorResponse);
+    }
+
+    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+    public ResponseEntity<ErrorResponse> handleMethodNotSupported(HttpRequestMethodNotSupportedException ex, HttpServletRequest request) {
+        String error = "Method not allowed";
+        String message = ex.getMessage();
+        HttpStatus status = HttpStatus.METHOD_NOT_ALLOWED;
+        ErrorResponse errorResponse = new ErrorResponse(Instant.now(), status.value(), error, message, request.getRequestURI());
+        return ResponseEntity.status(status).body(errorResponse);
+    }
+
+    @ExceptionHandler(HttpMediaTypeNotSupportedException.class)
+    public ResponseEntity<ErrorResponse> handleMediaTypeNotSupported(HttpMediaTypeNotSupportedException ex, HttpServletRequest request) {
+        String error = "Unsupported media type";
+        String message = ex.getMessage();
+        HttpStatus status = HttpStatus.UNSUPPORTED_MEDIA_TYPE;
         ErrorResponse errorResponse = new ErrorResponse(Instant.now(), status.value(), error, message, request.getRequestURI());
         return ResponseEntity.status(status).body(errorResponse);
     }
