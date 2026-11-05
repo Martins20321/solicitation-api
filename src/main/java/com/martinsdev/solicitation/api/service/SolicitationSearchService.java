@@ -22,6 +22,7 @@ import org.springframework.data.elasticsearch.core.query.CriteriaQuery;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -101,6 +102,8 @@ public class SolicitationSearchService {
                 pageRequest.getPageNumber(), pageRequest.getPageSize(), results.getTotalHits());
     }
 
+    private static final Set<String> SORTABLE_FIELDS = Set.of("createdAt", "status", "priority", "serviceType", "state");
+
     private Sort buildSort(String sort) {
         String sortClean = sort.strip();
         String[] split = sortClean.split(",");
@@ -109,6 +112,9 @@ public class SolicitationSearchService {
         }
         String field = split[0];
         String direction = split[1];
+        if (!SORTABLE_FIELDS.contains(field.strip())) { // somente esses valores são aceitos
+            throw new InvalidOperationException("Invalid sort field '" + field.strip() + "'. Allowed: " + String.join(", ", SORTABLE_FIELDS));
+        }
         try {
             return Sort.by(Sort.Direction.valueOf(direction.toUpperCase().strip()), field.strip());
         } catch (IllegalArgumentException exception) {
