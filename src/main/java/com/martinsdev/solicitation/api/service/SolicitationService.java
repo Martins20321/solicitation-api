@@ -16,6 +16,8 @@ import com.martinsdev.solicitation.api.model.enums.Priority;
 import com.martinsdev.solicitation.api.model.enums.StatusSolicitation;
 import com.martinsdev.solicitation.api.repository.SolicitationRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -45,9 +47,8 @@ public class SolicitationService {
     }
 
     // cliente buscando todas as suas solicitacoes
-    public List<SolicitationDetailResponseDTO> findAllByClient(User client) {
-        return repository.findByClient(client)
-                .stream().map(SolicitationDetailResponseDTO::new).toList();
+    public Page<SolicitationDetailResponseDTO> findAllByClient(User client, Pageable pageable) {
+        return repository.findByClient(client, pageable).map(SolicitationDetailResponseDTO::new);
     }
 
     // cliente buscando uma solicitacao somente
