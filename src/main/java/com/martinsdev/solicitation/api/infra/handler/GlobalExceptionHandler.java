@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -107,6 +108,15 @@ public class GlobalExceptionHandler {
         String error = "Unauthorized";
         String message = "Invalid email or password";
         HttpStatus status = HttpStatus.UNAUTHORIZED;
+        ErrorResponse errorResponse = new ErrorResponse(Instant.now(), status.value(), error, message, request.getRequestURI());
+        return ResponseEntity.status(status).body(errorResponse);
+    }
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<ErrorResponse> handleHttpMessageNotReadable(HttpMessageNotReadableException ex, HttpServletRequest request) {
+        String error = "Malformed JSON";
+        String message = "The request body could not be parsed. Check the JSON syntax.";
+        HttpStatus status = HttpStatus.BAD_REQUEST;
         ErrorResponse errorResponse = new ErrorResponse(Instant.now(), status.value(), error, message, request.getRequestURI());
         return ResponseEntity.status(status).body(errorResponse);
     }
