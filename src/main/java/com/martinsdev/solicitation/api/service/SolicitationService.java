@@ -75,7 +75,7 @@ public class SolicitationService {
                 .build();
 
         solicitationStp1.setStepOneData(stepOne);
-        solicitationStp1.setCurrentStep(1);
+        solicitationStp1.setCurrentStep(Math.max(1, solicitationStp1.getCurrentStep()));
 
         repository.save(solicitationStp1);
         solicitationIndexService.index(solicitationStp1);
@@ -101,7 +101,7 @@ public class SolicitationService {
                 .build();
 
         solicitationStp2.setStepTwoData(stepTwo);
-        solicitationStp2.setCurrentStep(2);
+        solicitationStp2.setCurrentStep(Math.max(2, solicitationStp2.getCurrentStep()));
 
         repository.save(solicitationStp2);
         solicitationIndexService.index(solicitationStp2);
@@ -127,7 +127,7 @@ public class SolicitationService {
         }
 
         solicitationStp3.setStepThreeData(stepThree);
-        solicitationStp3.setCurrentStep(3);
+        solicitationStp3.setCurrentStep(Math.max(3, solicitationStp3.getCurrentStep()));
 
         repository.save(solicitationStp3);
         solicitationIndexService.index(solicitationStp3);
